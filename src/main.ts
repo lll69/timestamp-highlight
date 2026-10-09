@@ -176,11 +176,6 @@ const editor = new EditorView({
             timeHighlighter,
             // tsHover,
             // EditorView.updateListener.of(u => { if (u.docChanged) updateCount(); }),
-            EditorView.baseTheme({
-                ".cm-ts": { borderRadius: "3px", padding: "0 1px", cursor: "help" },
-                ".cm-ts-sec": { background: "#ffe9a8", outline: "1px solid #e8b93a" },
-                ".cm-ts-ms": { background: "#bfe6ff", outline: "1px solid #3f9ddb" },
-            }),
         ],
     }),
     parent: editorDiv,
@@ -212,7 +207,7 @@ let mouseX = 0, mouseY = 0, isTouch = false;
 const balloonStyle = document.getElementById("balloon-style") as HTMLStyleElement;
 function updateBalloonCss() {
     if (!balloonCheck.checked && !isTouch) {
-        const { width, height } = document.body.getBoundingClientRect();
+        const { width, height } = editorDiv.getBoundingClientRect();
         const left = mouseX < width / 2;
         const top = mouseY < height / 2;
         const css = `body.balloon-on .cm-timestamp::after,.cm-timestamp:hover::after{${left ? "left" : "right"}:${left ? mouseX : width - mouseX}px;${top ? "top" : "bottom"}:${top ? mouseY : height - mouseY}px;}`;
@@ -237,10 +232,11 @@ balloonCheck.addEventListener("change", () => {
     updateBalloonCss();
 });
 
-document.documentElement.addEventListener("pointermove", (e) => {
+editorDiv.addEventListener("pointermove", (e) => {
     isTouch = e.pointerType == "touch";
-    mouseX = e.pageX;
-    mouseY = e.pageY;
+    const { top, left } = editorDiv.getBoundingClientRect();
+    mouseX = e.pageX - left;
+    mouseY = e.pageY - top;
     updateBalloonCss();
 });
 
