@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Timestamp Highlighter</title>
+    <meta name="viewport" content="width=device-width" />
+    <style id="balloon-style"></style>
+    <style>
+        * {
+            --mono-font: 'Hack', 'JetBrains Mono', 'Roboto Mono', 'Courier New', Courier, monospace;
+        }
+
+        html,
+        body {
+            margin: 0;
+            font-family: sans-serif;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .editor {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: hidden;
+            font-family: var(--mono-font);
+        }
+
+        .editor .cm-editor {
+            height: 100%;
+        }
+
+        .cm-timestamp {
+            background-color: rgba(255, 204, 128, 0.4);
+        }
+
+        .cm-timestamp-sec {
+            background-color: rgba(165, 214, 167, 0.4);
+        }
+
+        .cm-timestamp-ms {
+            background-color: rgba(144, 202, 249, 0.4);
+        }
+
+        .ts-raw {
+            white-space: pre;
+        }
+
+        body.balloon-on .cm-ts {
+            position: relative;
+        }
+
+        body.balloon-on .cm-timestamp::after,
+        .cm-timestamp:hover::after {
+            content: attr(data-balloon);
+            position: absolute;
+            transform: translate(5px, -4px);
+            background: rgba(31, 35, 41, 0.75);
+            color: #fff;
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+            pointer-events: none;
+            z-index: 40;
+            white-space: pre;
+        }
+
+        html:not(.dark) {
+            color-scheme: light;
+        }
+
+        html.dark {
+            color-scheme: dark;
+        }
+
+        html.dark .cm-gutters {
+            background-color: #121212;
+            color: #fff;
+        }
+
+        html.dark .cm-gutterElement.cm-activeLineGutter {
+            background-color: #272727;
+            color: #fff;
+        }
+
+        html.dark .cm-selectionBackground {
+            background-color: #666666 !important;
+        }
+
+        a,
+        a:visited {
+            color: #2196f3;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="clear">Clear</button>
+        <select id="lang-select"></select>
+        <select id="dark-select">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+        <label><input type="checkbox" id="balloon-check" /> Show Balloons</label>
+        |
+        Time Range(UTC):
+        <input type="date" id="min-time-input" value="1980-01-01" />
+        to
+        <input type="date" id="max-time-input" value="2199-12-31" />
+        |
+        <a href="https://github.com/lll69/timestamp-highlight">GitHub</a>
+        |
+        <a href="https://www.npmjs.com/package/codemirror">CodeMirror</a>
+        |
+        <a href="https://github.com/js-org/js.org/">JS.ORG</a>
+        |&nbsp;<h1 style="display:inline;font-size:inherit;margin-block:0"><a href="/">Timestamp Highlighter</a></h1>
+    </div>
+    <div class="editor" id="editor">
+        <p>Highlight timestamps in JSON, XML, Logs, etc.</p>
+        <p>Hover to see every time.</p>
+        <p>Loading editor...</p>
+    </div>
+</body>
+<script src="main.js"></script>
+
+</html>
